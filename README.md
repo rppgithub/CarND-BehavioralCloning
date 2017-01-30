@@ -49,6 +49,7 @@ The solutions contains the following files:
    * Shuffled the data and perfom an 80/20 split of the train/test data. Don't use validation data since validation is performed on the track
    * Used Adam optimizer with default learning rate and mean square error
    * Used fit generator with 10 epochs.
+   
 ## Approach
   * Used ideas from Nvidia paper and comma.ai to augment images. Also from Dr. Vivek Yadav learnt how to augment images. 
   * Although the Nvidia model worked without any changes , I found that it took a while to train it on my laptop. My mentor suggested reading Mohan Karthik's paper @mohankarthik
