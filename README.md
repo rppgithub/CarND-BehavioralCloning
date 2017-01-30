@@ -20,11 +20,12 @@ The solutions contains the following files:
  * I am using the set of data provided by Udacity with the following changes:
    * Kept only the S channel in the HSV color space and reduced the size to 16 rows and 32 columns. This idea was     borrowed from https://github.com/xslittlegrass/CarND-Behavioral-Cloning
    * Added a small offset ( +/- .3 ) to left and right images respectively. I started with .4 for the left offset and .8 for the right offset and scaled down after observing behavior on the tracks
-   * I randomly flip images to augment the data set
+   * I  discard flipping images to augment the data set since it is not necessary and makes the driving erratic.
    * Ideas that I discarded after running it on the tracks:
      - Cropping the image to discard the bonnet of the car which is visible in the image
      - Shearing the image
      - Increasing brightness 
+     - Flipping images
      
 ## Architecture
   * This model uses 497 parameters
@@ -51,7 +52,7 @@ The solutions contains the following files:
 ## Approach
   * Used ideas from Nvidia paper and comma.ai to augment images. Also from Dr. Vivek Yadav learnt how to augment images. 
   * Although the Nvidia model worked without any changes , I found that it took a while to train it on my laptop. My mentor suggested reading Mohan Karthik's paper @mohankarthik
-  * Another student Mengxi Wu wrote about the tiny model with just a few parameters. I borrowed the idea of using just the S channel in the HSV color space. This works for both the tracks. I experimented by adding a slight offset to the left and right steering through a set of trial and error. Also, flipped images to augment.
+  * Another student Mengxi Wu wrote about the tiny model with just a few parameters. I borrowed the idea of using just the S channel in the HSV color space. This works for both the tracks. I experimented by adding a slight offset to the left and right steering through a set of trial and error. Originally, I had flipped images but noticed that it makes the driving erratic after a while. So, I have not used this technique anymore.
   * Driving on track 2, noticed that the car had difficulty going up-hill. I modified drive.py to set throttle to .5 whenever speed decreased to less than 5 mph. With this change, the car is now able to finish track 2. Track 1 worked with throttle set to .2.
   * Many thanks to all of the people on the forums and the keras documentation.
   
