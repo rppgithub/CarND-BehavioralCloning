@@ -1,18 +1,11 @@
-# Test1 model1 left turn .45 right turn .4 passed
-# Test2 model2 right turn .4 failed
-# Test3 model2 right turn .6 failed
-# Test4 model3 right turn .8 failed
-# Test5 model4 left turn .45 right turn .8 failed
-# Test6 model5 left turn .45 right turn .8 failed
-# Test7 model6 left turn .3 right turn .8 failed
-# Test8 model7 left turn .3 right turn .8 passed with 10 epochs
-# Test9 model7 
+# Test model 
 #      left turn .3 
-#      right turn .8
+#      right turn .3
 #      epochs 10
 #      augment with flip 
 #      Passed
-#      Submit this
+#      Track 1 throttle .2
+#      Track 2 throttle .5 when speed < 5mph
 # coding: utf-8
 
 # In[ ]:
@@ -51,7 +44,7 @@ def read_file(csvfile,lines):
          reader = csv.reader(f)
          for line in reader:
              lines.append(line)
-    discard_labels = lines.pop(0)
+    remove_labels = lines.pop(0)
 
     return lines
 
@@ -61,12 +54,6 @@ def read_file(csvfile,lines):
 
 
 # In[ ]:
-
-def image_trim(img):
-    trimed = img#[20:140]
-#     resized = cv2.resize(img,(32,16))
-    resized = cv2.resize((cv2.cvtColor(img, cv2.COLOR_RGB2HSV))[:,:,1],(32,16))
-    return resized
 
 def random_shear(image,steering,shear_range=100):
     rows,cols = image.shape
@@ -113,9 +100,9 @@ def augment_images(image, steering):
 
 # In[ ]:
 
-def read_next_image(m,X_train,y_train):
-    img = plt.imread(data_folder + (X_train[m].strip()))
-    steering = float(y_train[m])
+def read_next_image(i,X_train,y_train):
+    img = plt.imread(data_folder + (X_train[i].strip()))
+    steering = float(y_train[i])
     return img, steering
 
 
@@ -124,23 +111,14 @@ def read_next_image(m,X_train,y_train):
 def load_data(X,y,lines,data_folder,left_offset,right_offset):
 
     for i in range(len(lines)):
-        #img = plt.imread(data_folder + (lines[i][0]).strip())
-        #X.append(image_preprocessing(img))
-        #X.append(img)
         X.append(lines[i][0])
         y.append(float(lines[i][3]))
 
     for i in range(len(lines)):
-        #img = plt.imread(data_folder + (lines[i][1]).strip())
-        #X.append(image_preprocessing(img))
-        #X.append(img)
         X.append(lines[i][1])
         y.append(float(lines[i][3]) + left_offset)
     
     for i in range(len(lines)):
-        #img = plt.imread(data_folder + (lines[i][2]).strip())
-        #X.append(image_preprocessing(img))
-        #X.append(img)
         X.append(lines[i][2])
         y.append(float(lines[i][3]) - right_offset)
 
@@ -152,8 +130,8 @@ def load_data(X,y,lines,data_folder,left_offset,right_offset):
 # In[ ]:
 
 def generate_training_data(X_train, y_train,img_cols,img_rows):
-        m               = np.random.randint(0,len(y_train))
-        image, steering = read_next_image(m,X_train,y_train)
+        i               = np.random.randint(0,len(y_train))
+        image, steering = read_next_image(i,X_train,y_train)
         
         image  = image_preprocessing(image,img_cols,img_rows)
         
@@ -175,74 +153,7 @@ def generate_batch(X_train,y_train,img_cols,img_rows,batch_size = 32):
             
         yield batch_images, batch_steering
 
-def create_model3(img_rows,img_cols):
-    model = Sequential()
-    model.add(Lambda(lambda x: x/127.5 - 1.,input_shape=(16,32,1)))
-    model.add(Conv2D(2, 3, 3, border_mode='valid', input_shape=(16,32,1), activation='relu'))
-    model.add(MaxPooling2D((2,2),(2,2),'valid'))
-    model.add(Dropout(0.25))
-    model.add(Flatten())
-    model.add(Dense(16,activation='elu'))
-    model.add(Dropout(0.2))
-    model.add(Dense(8,activation='elu'))
-    model.add(Dropout(0.2))
-    model.add(Dense(4,activation='elu'))
-    model.add(Dropout(0.2))
-    model.add(Dense(1,activation='elu'))
-    model.summary()
-
-    return model
-
-
-def create_model4(img_rows,img_cols):
-    model = Sequential()
-    model.add(Lambda(lambda x: x/127.5 - 1.,input_shape=(16,32,1)))
-    model.add(Conv2D(2, 3, 3, border_mode='valid', input_shape=(16,32,1), activation='relu'))
-    model.add(MaxPooling2D((2,2),(2,2),'valid'))
-    model.add(Dropout(0.25))
-    model.add(Flatten())
-    model.add(Dense(16,activation='relu'))
-    model.add(Dense(8,activation='relu'))
-    model.add(Dense(4,activation='relu'))
-    model.add(Dropout(0.2))
-    model.add(Dense(1,activation='relu'))
-    model.summary()
-
-    return model
-
-def create_model5(img_rows,img_cols):
-    model = Sequential()
-    model.add(Lambda(lambda x: x/127.5 - 1.,input_shape=(16,32,1)))
-    model.add(Conv2D(2, 3, 3, border_mode='valid', input_shape=(16,32,1), activation='relu'))
-    model.add(MaxPooling2D((2,2),(2,2),'valid'))
-    model.add(Dropout(0.25))
-    model.add(Flatten())
-    model.add(Dense(16,activation='elu'))
-    model.add(Dense(8,activation='elu'))
-    model.add(Dense(4,activation='elu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(1,activation='elu'))
-    model.summary()
-
-    return model
-
-def create_model6(img_rows,img_cols):
-    model = Sequential()
-    model.add(Lambda(lambda x: x/127.5 - 1.,input_shape=(16,32,1)))
-    model.add(Conv2D(2, 3, 3, border_mode='valid', input_shape=(16,32,1), activation='relu'))
-    model.add(MaxPooling2D((4,4),(4,4),'valid'))
-    model.add(Dropout(0.25))
-    model.add(Flatten())
-    model.add(Dense(16,activation='elu'))
-    model.add(Dense(8,activation='elu'))
-    model.add(Dense(4,activation='elu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(1,activation='elu'))
-    model.summary()
-
-    return model
-
-def create_model7(img_rows,img_cols):
+def create_model(img_rows,img_cols):
 
     model = Sequential()
     model.add(Lambda(lambda x: x/127.5 - 1.,input_shape=(16,32,1)))
@@ -251,34 +162,5 @@ def create_model7(img_rows,img_cols):
     model.add(Dropout(0.25))
     model.add(Flatten())
     model.add(Dense(1,activation='tanh'))
-    model.summary()
-    return model
-
-
-def create_model2(img_rows,img_cols):
-    model = Sequential()
-    model.add(Lambda(lambda x: x/127.5 - 1.,input_shape=(16,32,1)))
-    model.add(Conv2D(2, 3, 3, border_mode='valid', input_shape=(16,32,1), activation='relu'))
-    model.add(MaxPooling2D((2,2),(2,2),'valid'))
-    model.add(Dropout(0.25))
-    model.add(Flatten())
-    model.add(Dense(16,activation='elu'))
-    model.add(Dense(8,activation='elu'))
-    model.add(Dense(4,activation='elu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(1,activation='elu'))
-    model.summary()
-
-    return model
-
-def create_model(img_rows,img_cols):
-    model = Sequential()
-    model.add(Lambda(lambda x: x/127.5 - 1.,input_shape=(img_rows,img_cols,1)))
-    model.add(Conv2D(2, 3, 3, border_mode='valid', input_shape=(img_rows,img_cols,1), activation='relu'))
-    model.add(MaxPooling2D((4,4),(4,4),'valid'))
-    model.add(Dropout(0.25))
-    model.add(Flatten())
-    model.add(Dense(1))
-
     model.summary()
     return model
