@@ -24,7 +24,7 @@ The solutions contains the following files:
    * Ideas that I discarded after running it on the tracks:
      - Cropping the image to discard the bonnet of the car which is visible in the image
      - Shearing the image
-     - Increasing brightness
+     - Increasing brightness 
      
 ## Architecture
   * This model uses 497 parameters
@@ -54,4 +54,10 @@ The solutions contains the following files:
   * Another student Mengxi Wu wrote about the tiny model with just a few parameters. I borrowed the idea of using just the S channel in the HSV color space. This works for both the tracks. I experimented by adding a slight offset to the left and right steering through a set of trial and error. Also, flipped images to augment.
   * Driving on track 2, noticed that the car had difficulty going up-hill. I modified drive.py to set throttle to .5 whenever speed decreased to less than 5 mph. With this change, the car is now able to finish track 2. Track 1 worked with throttle set to .2.
   * Many thanks to all of the people on the forums and the keras documentation.
+  
+##Example images
+ * Original random image [index.png](index.png)
+ * Pre-processed image [preprocessed.png](preprocessed.png)
+ * Flipped image [flippedimage.png](flippedimage.png)
+ * Cropped image [croppedimage.png](croppedimage.png)
      
