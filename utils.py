@@ -135,7 +135,7 @@ def generate_training_data(X_train, y_train,img_cols,img_rows):
         
         image  = image_preprocessing(image,img_cols,img_rows)
         
-        image,steering = augment_images(image,steering)
+        #image,steering = augment_images(image,steering)
         
         
         return image, steering
